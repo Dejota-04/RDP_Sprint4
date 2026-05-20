@@ -1,0 +1,40 @@
+# ==========================================
+# Rei dos Piratas API - .gitignore
+# ==========================================
+
+# 1. Pastas de Build (Binários do C#)
+[Bb]in/
+[Oo]bj/
+
+# 2. Logs do Serilog
+logs/
+*.log
+api-log-*.txt
+
+# 3. Configurações Locais e Arquivos Sensíveis
+appsettings.Development.json
+appsettings.local.json
+secrets.json
+*.env
+
+# 4. Resultados de Testes (xUnit / Moq)
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.coverage
+*.coveragexml
+
+# 5. IDEs (Visual Studio, VS Code, Rider)
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.sln.docstates
+
+# 6. Sistema Operacional (Windows / Mac)
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+$RECYCLE.BIN/
