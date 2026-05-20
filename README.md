@@ -229,19 +229,54 @@ dotnet ef database update --startup-project ../ReiDosPiratas.API
 
 ### 4. Rodar a Aplicação
 
-Retorne ao projeto principal da API e inicie o servidor Kestrel:
+Inicie o servidor Kestrel:
 
 Bash
 
 ```
-cd ../ReiDosPiratas.API
+cd ReiDosPiratas.API
 dotnet run
 
 ```
 
-Abra o navegador e acesse a interface interativa do Swagger para testar as rotas e injetar tokens de autenticação: `http://localhost:5000/swagger`
+Abra o navegador e acesse a interface interativa do Swagger para testar as rotas: `http://localhost:5000/swagger`
 
-## 🧪 8. Engenharia de Testes Automatizados (Padrão AAA)
+
+## 🛠️ 8. Guia Rápido de Teste no Swagger (Para Avaliação)
+
+Para testar as rotas de criação de produtos (`POST /api/Produtos`), siga o fluxo de autorização abaixo:
+
+1.  **Gerar Token:** Acesse o endpoint `POST /api/Auth/login`, clique em _Try it out_ e envie o JSON com as credenciais padrão (`admin` / `admin123`). Copie o texto do token retornado.
+    
+2.  **Autorizar no Swagger:** Suba até o topo da página e clique no botão verde **Authorize** (ícone de cadeado).
+    
+3.  **⚠️ IMPORTANTE:** Na caixa de texto, você deve digitar a palavra **`Bearer`**, dar **um espaço**, e depois colar o seu token (ex: `Bearer eyJhbGci...`).
+    
+4.  **Criar Produto:** Vá até o `POST /api/Produtos`, clique em _Try it out_ e utilize o **JSON de exemplo mastigado** abaixo para evitar erros de restrição de chave estrangeira (_Foreign Key_):
+    
+
+JSON
+
+```
+{
+  "nome": "One Piece - Volume 100",
+  "descricao": "Edição comemorativa do volume 100 de One Piece.",
+  "preco": 34.90,
+  "precoOriginal": 45.00,
+  "estoque": 100,
+  "categoria": 1,
+  "funcionarioId": 1,
+  "autor": "Eiichiro Oda",
+  "condicao": 1,
+  "enderecoImagem": "[https://mangas.com/op100.jpg](https://mangas.com/op100.jpg)",
+  "altura": 20.0,
+  "largura": 13.7,
+  "profundidade": 1.5,
+  "peso": 0.2
+}
+```
+
+## 🧪 9. Engenharia de Testes Automatizados (Padrão AAA)
 
 A integridade arquitetural do sistema é assegurada por testes que utilizam o ecossistema de ferramentas **xUnit** e isolamento via dublês de testes do **Moq**, estruturados sob o padrão formal **Arrange, Act, Assert (AAA)**.
 
@@ -313,7 +348,7 @@ public class ProdutosIntegrationTests : IClassFixture<WebApplicationFactory<Prog
 
 ```
 
-## 👨‍💻 9. Integrantes do Grupo CATECH
+## 👨‍💻 10. Integrantes do Grupo CATECH
 
 -   **Daniel Santana Corrêa Batista** [RM559622]
     
