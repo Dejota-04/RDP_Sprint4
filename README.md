@@ -185,12 +185,11 @@ O ecossistema foi preparado para cenários de alta resiliência e auditoria de p
 ## 🚀 7. Guia de Instalação e Execução
 
 ### 1. Pré-requisitos
-
--   .NET 8 SDK instalado localmente.
-    
--   Acesso ativo a uma instância de Banco de Dados Oracle Cloud.
-    
--   MongoDB rodando localmente ou via container Docker na porta padrão `27017`.
+* .NET 8 SDK instalado localmente.
+* Acesso ativo a uma instância de Banco de Dados Oracle Cloud.
+* **MongoDB:** É obrigatório ter uma instância rodando na porta padrão `27017` para a gravação dos logs de auditoria. Caso utilize o Docker, basta rodar o comando abaixo em qualquer terminal para subir o banco em segundo plano:
+  ```bash
+  docker run -d -p 27017:27017 --name mongodb mongo:latest
     
 
 ### 2. Configurar Variáveis no `appsettings.json`
@@ -259,20 +258,20 @@ JSON
 
 ```
 {
-  "nome": "One Piece - Volume 100",
-  "descricao": "Edição comemorativa do volume 100 de One Piece.",
-  "preco": 34.90,
-  "precoOriginal": 45.00,
-  "estoque": 100,
-  "categoria": 1,
-  "funcionarioId": 1,
-  "autor": "Eiichiro Oda",
-  "condicao": 1,
-  "enderecoImagem": "[https://mangas.com/op100.jpg](https://mangas.com/op100.jpg)",
+  "titulo": "Naruto - Volume 2",
+  "descricao": "O início da jornada de Naruto Uzumaki para se tornar o Hokage da Aldeia da Folha.",
+  "imagem_url": "https://mangas.com/naruto_vol1.jpg",
+  "preco": 29.90,
+  "preco_original": 35.00,
+  "peso": 0.2,
+  "estoque": 150,
+  "condicao_produto": 1,
   "altura": 20.0,
   "largura": 13.7,
   "profundidade": 1.5,
-  "peso": 0.2
+  "funcionarioId": 1,
+  "autor": "Masashi Kishimoto",
+  "categoria": 1
 }
 ```
 
