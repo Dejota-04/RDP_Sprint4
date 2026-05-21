@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ReiDosPiratas.API.Middlewares
 {
-    // Implementação nativa do .NET 8 para interceptar exceções não tratadas
+
     public class GlobalExceptionHandler : IExceptionHandler
     {
         public async ValueTask<bool> TryHandleAsync(
@@ -27,7 +27,7 @@ namespace ReiDosPiratas.API.Middlewares
             httpContext.Response.StatusCode = problemDetails.Status.Value;
             await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
-            return true; // Sinaliza que a exceção foi tratada
+            return true;
         }
     }
 }
