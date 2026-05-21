@@ -23,7 +23,6 @@ namespace ReiDosPiratas.Infrastructure.Repositories
 
         public async Task<IEnumerable<Produto>> ObterTodosAsync()
         {
-            // AsNoTracking melhora a performance de leitura pois o EF não precisa rastrear os objetos
             return await _context.Produtos.AsNoTracking().ToListAsync();
         }
 

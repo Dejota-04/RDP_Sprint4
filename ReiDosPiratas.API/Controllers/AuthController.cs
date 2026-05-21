@@ -22,9 +22,7 @@ namespace ReiDosPiratas.API.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest login)
         {
-            // Tradeoff de Segurança: Para a agilidade da Sprint 4, estamos usando credenciais fixas.
-            // Em um cenário real (especialmente com dados sensíveis ou transações), validaríamos
-            // isso contra o banco de dados Oracle usando senhas com hash e salt (ex: ASP.NET Core Identity).
+
             if (login.Username == "admin" && login.Password == "admin123")
             {
                 var token = GerarTokenJwt(login.Username);
@@ -36,7 +34,6 @@ namespace ReiDosPiratas.API.Controllers
 
         private string GerarTokenJwt(string username)
         {
-            // Puxa a chave do appsettings ou usa o fallback que configuramos no Program.cs
             var jwtKey = _configuration["Jwt:Key"] ?? "UmaChaveSuperSecretaParaSuaAPIFuncionarNaSprint4!";
             var key = Encoding.ASCII.GetBytes(jwtKey);
 
@@ -47,7 +44,7 @@ namespace ReiDosPiratas.API.Controllers
                     new Claim(ClaimTypes.Name, username),
                     new Claim(ClaimTypes.Role, "Admin")
                 }),
-                Expires = DateTime.UtcNow.AddHours(2), // Token expira em 2 horas
+                Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
@@ -58,7 +55,6 @@ namespace ReiDosPiratas.API.Controllers
         }
     }
 
-    // DTO auxiliar apenas para receber os dados de login
     public class LoginRequest
     {
         public string Username { get; set; } = string.Empty;

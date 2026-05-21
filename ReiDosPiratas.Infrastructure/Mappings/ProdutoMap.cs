@@ -17,7 +17,6 @@ namespace ReiDosPiratas.Infrastructure.Mappings
             builder.Property(p => p.Descricao).HasColumnName("DESCRICAO").IsRequired();
             builder.Property(p => p.Imagem_url).HasColumnName("ENDERECO_IMAGEM").IsRequired();
 
-            // Mapeando decimal corretamente para o Oracle
             builder.Property(p => p.Preco).HasColumnName("PRECO").HasColumnType("decimal(18,2)").IsRequired();
             builder.Property(p => p.Preco_original).HasColumnName("PRECO_ORIGINAL").HasColumnType("decimal(18,2)").IsRequired();
 

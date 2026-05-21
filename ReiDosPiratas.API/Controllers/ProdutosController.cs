@@ -17,33 +17,30 @@ namespace ReiDosPiratas.API.Controllers
         private readonly IProdutoRepository _produtoRepository;
         private readonly IAuditLogRepository _auditLogRepository;
 
-        // Injeção de Dependência dos dois bancos (Oracle e Mongo)
         public ProdutosController(IProdutoRepository produtoRepository, IAuditLogRepository auditLogRepository)
         {
             _produtoRepository = produtoRepository;
             _auditLogRepository = auditLogRepository;
         }
 
-        // GET: api/produtos?pagina=1&tamanhoPagina=10&categoria=1&ordenarPor=preco_desc
 [HttpGet]
   public async Task<ActionResult<PagedResponseDTO<ProdutoResponseDTO>>> GetProdutos(
       [FromQuery] int pagina = 1,
       [FromQuery] int tamanhoPagina = 10,
       [FromQuery] int? categoria = null,
-      [FromQuery] string? ordenarPor = null) // Novo parâmetro
+      [FromQuery] string? ordenarPor = null)
   {
       var produtos = await _produtoRepository.ObterTodosAsync();
 
       if (categoria.HasValue)
           produtos = produtos.Where(p => p.Categoria == categoria.Value);
 
-      // Lógica de Ordenação
       produtos = ordenarPor?.ToLower() switch
       {
           "preco_asc" => produtos.OrderBy(p => p.Preco),
           "preco_desc" => produtos.OrderByDescending(p => p.Preco),
           "titulo" => produtos.OrderBy(p => p.Titulo),
-          _ => produtos.OrderBy(p => p.Produto_ID) // Default
+          _ => produtos.OrderBy(p => p.Produto_ID)
       };
 
       var totalItens = produtos.Count();
@@ -62,7 +59,6 @@ namespace ReiDosPiratas.API.Controllers
       });
   }
 
-        // GET: api/produtos/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProdutoResponseDTO>> GetProduto(long id)
         {
@@ -73,9 +69,8 @@ namespace ReiDosPiratas.API.Controllers
             return Ok(MapearParaDTO(produto));
         }
 
-        // POST: api/produtos
         [HttpPost]
-        [Authorize] // Exige Token JWT
+        [Authorize]
         public async Task<ActionResult<ProdutoResponseDTO>> PostProduto(ProdutoRequestDTO dto)
         {
             var produto = new Produto
@@ -98,7 +93,6 @@ namespace ReiDosPiratas.API.Controllers
 
             await _produtoRepository.AdicionarAsync(produto);
 
-            // Integração NoSQL: Grava auditoria no MongoDB
             await RegistrarAuditoriaMongo("CREATE", $"Produto '{produto.Titulo}' cadastrado.");
 
             var responseDto = MapearParaDTO(produto);
@@ -106,9 +100,8 @@ namespace ReiDosPiratas.API.Controllers
             return CreatedAtAction(nameof(GetProduto), new { id = produto.Produto_ID }, responseDto);
         }
 
-        // PUT: api/produtos/5
         [HttpPut("{id}")]
-        [Authorize] // Exige Token JWT
+        [Authorize]
         public async Task<IActionResult> PutProduto(long id, ProdutoRequestDTO dto)
         {
             var produtoExistente = await _produtoRepository.ObterPorIdAsync((int)id);
@@ -121,15 +114,13 @@ namespace ReiDosPiratas.API.Controllers
 
             await _produtoRepository.AtualizarAsync(produtoExistente);
 
-            // Integração NoSQL
             await RegistrarAuditoriaMongo("UPDATE", $"Produto ID {id} alterado.");
 
             return NoContent();
         }
 
-        // DELETE: api/produtos/5
         [HttpDelete("{id}")]
-        [Authorize] // Exige Token JWT
+        [Authorize]
         public async Task<IActionResult> DeleteProduto(long id)
         {
             var produtoExistente = await _produtoRepository.ObterPorIdAsync((int)id);
@@ -137,13 +128,11 @@ namespace ReiDosPiratas.API.Controllers
 
             await _produtoRepository.RemoverAsync((int)id);
 
-            // Integração NoSQL
             await RegistrarAuditoriaMongo("DELETE", $"Produto ID {id} removido.");
 
             return NoContent();
         }
 
-        // --- MÉTODOS PRIVADOS AUXILIARES ---
         private ProdutoResponseDTO MapearParaDTO(Produto produto)
         {
             var dto = new ProdutoResponseDTO
@@ -165,7 +154,6 @@ namespace ReiDosPiratas.API.Controllers
                 Categoria = produto.Categoria
             };
 
-            // Implementação do HATEOAS
             dto.Links.Add(new HateoasLink($"/api/produtos/{produto.Produto_ID}", "self", "GET"));
             dto.Links.Add(new HateoasLink($"/api/produtos/{produto.Produto_ID}", "update_produto", "PUT"));
             dto.Links.Add(new HateoasLink($"/api/produtos/{produto.Produto_ID}", "delete_produto", "DELETE"));
